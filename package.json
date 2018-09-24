@@ -8,7 +8,7 @@
     "build": "npm run ui:build",
     "ui:build": "webpack --mode production",
     "ui:dev": "API_ROOT=http://localhost:3000 webpack-dev-server --mode development --open",
-    "server:dev": "MONGO_CONNECTION_URL=mongodb://localhost:27017/foo nodemon server.js",
+    "server:dev": "nodemon -r dotenv/config server.js",
     "test": "jest",
     "linear": "node -r dotenv/config run-xml-to-linear-form.js",
     "tree": "node -r dotenv/config run-to-tree.js",

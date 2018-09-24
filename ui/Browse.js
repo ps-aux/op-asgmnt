@@ -8,33 +8,45 @@ import { Spinner } from './Spinner'
 import { withTree } from './withTree'
 import { Children } from './Children'
 import s from 'styled-components'
+import { Icon } from 'semantic-ui-react'
 
 const PathContainer = s(View)`
   color: 'black'
   cursor: pointer
+  align-item: center
 `
 const Segment = s.button`
   cursor: pointer
   background: none
   border: none
   color: black
+  font-size: 1.1em
   font-weight: 600
 `
-const PathNavigator = ({ path, back, returnToIndex }) =>
-  <PathContainer>
-    {/*{path.length > 1 && <button onClick={back}>Back</button>}*/}
-    <div>
+
+const BackButton = ({onClick}) =>
+  <Icon name="angle left"
+        style={{
+          cursor: 'pointer'
+        }}
+        onClick={onClick}/>
+
+const PathNavigator = ({path, back, canBack, returnToIndex}) =>
+  <PathContainer horizontal>
+    {canBack && <BackButton onClick={back}/>}
+    <View horizontal>
       {path.map((el, i) =>
         <Fragment key={el}>
           <Segment onClick={() => returnToIndex(i)}>{el}</Segment>
           {i < path.length - 1 && <span>{' > '}</span>}
         </Fragment>)}
-    </div>
+    </View>
   </PathContainer>
 
-const BrowseUi = ({ path, back, push, node, returnToIndex }) =>
+const BrowseUi = ({path, back, canBack, push, node, returnToIndex}) =>
   <View stretch>
     <PathNavigator path={path}
+                   canBack={canBack}
                    returnToIndex={returnToIndex}
                    back={back}/>
     {node ? <Children onItemClick={c => push(c.name)}>
@@ -45,17 +57,27 @@ const BrowseUi = ({ path, back, push, node, returnToIndex }) =>
 export default compose(
   withRouter,
   withTree(),
-  withProps(({ history, tree }) => {
+  withProps(({history, tree}) => {
 
     const first = '/' + tree.name
-    let { path: pathQuery = first } = parse(history.location.search)
+    let {path: pathQuery = first} = parse(history.location.search)
     if (!pathQuery.startsWith(first)) {
       pathQuery = first
     }
     const currentPath = pathQuery.split('/').slice(1)
+
+    const returnToIndex = i => {
+      const newPath = currentPath.slice(0, i + 1)
+      history.replace({
+        ...history.location,
+        search: `path=/` + newPath.join('/')
+      })
+    }
+
     return {
       path: currentPath,
-      back: () => history.goBack(),
+      back: () => returnToIndex(currentPath.length - 2),
+      canBack: currentPath.length > 1,
       push: name => {
         const newPath = currentPath.slice()
         newPath.push(name)
@@ -64,20 +86,14 @@ export default compose(
           search: `path=/` + newPath.join('/')
         })
       },
-      returnToIndex: i => {
-        const newPath = currentPath.slice(0, i + 1)
-        history.replace({
-          ...history.location,
-          search: `path=/` + newPath.join('/')
-        })
-      }
+      returnToIndex
     }
   }),
   withStateHandlers({
       node: null,
     },
     {
-      setNode: () => node => ({ node })
+      setNode: () => node => ({node})
     }),
   lifecycle({
     fetchData () {
