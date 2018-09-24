@@ -1,8 +1,8 @@
+import React from 'react'
 import { withAppCtx } from './AppContext'
 import { branch, lifecycle, renderComponent, withProps, withStateHandlers } from 'recompose'
 import { Spinner } from './Spinner'
 import { compose } from 'ramda'
-import React from 'react'
 
 const find = (n, path,
               offset = 0) => {
@@ -34,7 +34,7 @@ export const withTree = () =>
       }
     ),
     branch(({ tree }) => !tree,
-      renderComponent(() => <Spinner text="fetching tree"/>)),
+      renderComponent(() => <Spinner/>)),
     withProps(({ tree }) => ({
       getNode: path => getNode(tree, path)
     })))

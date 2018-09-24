@@ -13,7 +13,6 @@ const PathContainer = s(View)`
   color: 'black'
   cursor: pointer
 `
-
 const Segment = s.button`
   cursor: pointer
   background: none
@@ -21,7 +20,6 @@ const Segment = s.button`
   color: black
   font-weight: 600
 `
-
 const PathNavigator = ({ path, back, returnToIndex }) =>
   <PathContainer>
     {/*{path.length > 1 && <button onClick={back}>Back</button>}*/}

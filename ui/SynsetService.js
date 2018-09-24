@@ -19,7 +19,6 @@ const SynsetService = ({ apiRoot }) => {
     },
     search: ({ query }) => fetchJson(`/search?q=${query}`)
   }
-
 }
 
 export default SynsetService

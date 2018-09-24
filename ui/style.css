@@ -8,9 +8,4 @@ html, body, #app {
     flex-grow: 1;
     margin: 0;
     padding: 0;
-    /*height: 100%*/
-}
-
-html {
-    /*height: 100vh;*/
 }

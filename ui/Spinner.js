@@ -1,6 +1,5 @@
 import React from 'react'
 import { Loader } from 'semantic-ui-react'
 
-//{/*<div>{text}...</div>*/}
-export const Spinner = ({ text = 'fetching' }) =>
+export const Spinner = () =>
   <Loader active={true}/>

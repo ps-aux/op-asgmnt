@@ -15,11 +15,13 @@ const Centered = s(View).attrs({
   align-items: center
   justify-content: center
 `
-
 const Search = compose(
-  branch(prop('searching'), renderComponent(Spinner)),
-  branch(complement(prop('results')), renderComponent(() => <Centered> Enter searched term </Centered>))
-)(({ value, onChange, onSubmit, results, searching, onResultClick }) =>
+  branch(prop('searching'),
+    renderComponent(Spinner)),
+  branch(complement(prop('results')),
+    renderComponent(
+      () => <Centered> Enter searched term </Centered>))
+)(({value, onChange, onSubmit, results, searching, onResultClick}) =>
   <View stretch>
     {results.length > 1 ?
       <Children onItemClick={onResultClick}>
@@ -30,33 +32,30 @@ const Search = compose(
 
 export default compose(
   withRouter,
-  withStateHandlers({ searching: false, results: null }, {
-    searchStarted: () => () => ({ searching: true }),
-    searchEnded: () => results => ({ searching: false, results })
+  withStateHandlers({searching: false, results: null}, {
+    searchStarted: () => () => ({searching: true}),
+    searchEnded: () => results => ({searching: false, results})
   }),
   withAppCtx(),
-  withProps(({ value, searchStarted, searchEnded, history, synsetService }) => ({
-    onResultClick: ({ name }) => {
+  withProps(({value, searchStarted, searchEnded, history}) => ({
+    onResultClick: ({name}) => {
       const p = '/' + name.split(' > ').join('/')
       history.push(`/browse?path=${p}`)
     }
   })),
   lifecycle({
     fetchData () {
-      const { location, searchStarted, searchEnded, synsetService } = this.props
-      const { q: query } = parse(location.search)
+      const {location, searchStarted, searchEnded, synsetService} = this.props
+      const {q: query} = parse(location.search)
       if (!query)
         return
 
       searchStarted()
-      synsetService.search({ query })
+      synsetService.search({query})
         .then(searchEnded)
 
     },
     componentDidMount () {
-      // searchStarted()
-      // synsetService.search({ query: value })
-      //   .then(searchEnded)
       this.fetchData()
     },
     componentDidUpdate (prevProps) {

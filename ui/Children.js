@@ -1,6 +1,6 @@
+import React from 'react'
 import { AutoSizer, List } from 'react-virtualized'
 import { Child } from './Child'
-import React from 'react'
 
 export const Children = ({ children, onItemClick }) =>
   <div style={{ flex: '1 1 auto' }}>
