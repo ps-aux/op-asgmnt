@@ -1,0 +1,13 @@
+<ImageNetStructure>
+    <releaseData>xxx</releaseData>
+    <foo>bar</foo>
+    <synset words="a">
+        <synset words="b0">
+            <synset words="c0">
+                <synset words="d"/>
+            </synset>
+            <synset words="c1"/>
+        </synset>
+        <synset words="b1"/>
+    </synset>
+</ImageNetStructure>
